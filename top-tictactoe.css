@@ -6,10 +6,18 @@
 }
 
 .gamecell {
-    background-color: #ccfbf1;
     border-radius: 16px;
 }
 
-.gamecell:hover {
-    background-color: #5eead4;
+.gamecell.open {
+    background-color: #99f6e4;
 }
+
+.gamecell.open:hover {
+    background-color: #2dd4bf;
+}
+
+.gamecell.closed {
+    background-color: #f0fdfa;
+}
+
