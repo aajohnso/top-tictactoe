@@ -1,0 +1,15 @@
+#gameboard {
+    display: grid;
+    grid-template-columns: 200px 200px 200px;
+    grid-template-rows: 200px 200px 200px;
+    gap: 16px;
+}
+
+.gamecell {
+    background-color: #ccfbf1;
+    border-radius: 16px;
+}
+
+.gamecell:hover {
+    background-color: #5eead4;
+}
