@@ -32,6 +32,9 @@ const displayController = (() => {
         let gameCell = this.getAttribute("game-cell");
         currentTurn.addMark(gameCell);
         this.innerText = gameBoard.board[gameCell];
+        this.classList.remove("open");
+        this.classList.add("closed");
+        this.removeEventListener("click", displayMark);
         changeTurn();
     }
 
@@ -42,7 +45,5 @@ const displayController = (() => {
             currentTurn = gameBoard.playerOne;
         }
     }
-
-    
 
 })();
