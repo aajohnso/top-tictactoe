@@ -3,38 +3,42 @@ const gameBoard = (() => {
     const board = ["","","","","","","","",""];
     
     const Player = (name, mark) => {
+        const getName = () => name;
         const addMark = (cell) => {
             board[cell] = mark;
         }
-        return {addMark};
+        return {addMark, getName};
     };
 
     const playerOne = Player("Player One", "x");
     const playerTwo = Player("Player Two", "o");
 
-    playerOne.addMark(0);
-    playerOne.addMark(1);
-    playerTwo.addMark(2);
-    playerTwo.addMark(3);
-    playerTwo.addMark(4);
-    playerOne.addMark(5);
-    playerOne.addMark(6);
-    playerTwo.addMark(7);
-    playerOne.addMark(8);
-
-    return {board};
+    return {board, playerOne, playerTwo};
 
 })();
 
 const displayController = (() => {
 
+    let currentTurn = gameBoard.playerOne;
+    
     const gameBoardDiv = document.getElementById("gameboard");
     const gameBoardCells = document.getElementsByClassName("gamecell");
 
-    for (i = 0; i < gameBoard.board.length; i++) {
-        gameBoardCells[i].innerText = gameBoard.board[i];
+    for (i = 0; i < gameBoardCells.length; i++) {
+        gameBoardCells[i].addEventListener("click", function(){
+            let gameCell = this.getAttribute("game-cell");
+            currentTurn.addMark(gameCell);
+            this.innerText = gameBoard.board[gameCell];
+            changeTurn();
+        });
     }
 
-    console.log(gameBoard.board);
+    const changeTurn = () => {
+        if (currentTurn == gameBoard.playerOne) {
+            currentTurn = gameBoard.playerTwo;
+        } else {
+            currentTurn = gameBoard.playerOne;
+        }
+    }
 
 })();
