@@ -25,12 +25,14 @@ const displayController = (() => {
     const gameBoardCells = document.getElementsByClassName("gamecell");
 
     for (i = 0; i < gameBoardCells.length; i++) {
-        gameBoardCells[i].addEventListener("click", function(){
-            let gameCell = this.getAttribute("game-cell");
-            currentTurn.addMark(gameCell);
-            this.innerText = gameBoard.board[gameCell];
-            changeTurn();
-        });
+        gameBoardCells[i].addEventListener("click", displayMark);
+    }
+
+    function displayMark() {
+        let gameCell = this.getAttribute("game-cell");
+        currentTurn.addMark(gameCell);
+        this.innerText = gameBoard.board[gameCell];
+        changeTurn();
     }
 
     const changeTurn = () => {
@@ -40,5 +42,7 @@ const displayController = (() => {
             currentTurn = gameBoard.playerOne;
         }
     }
+
+    
 
 })();
