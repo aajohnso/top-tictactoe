@@ -65,7 +65,7 @@ const displayController = (() => {
         this.classList.add("closed");
         this.removeEventListener("click", displayMark);
         if (turn == 9) {
-            // TIE
+            showTie();
         } else if (currentTurn.checkWin()) {
             highlightWin(currentTurn.getWinningCells());
             for (i = 0; i < gameBoardCells.length; i++) {
@@ -86,6 +86,10 @@ const displayController = (() => {
                 gameBoardCells[cell].classList.add("win");
             }
         );
+    }
+
+    const showTie = () => {
+        console.log("TIE");
     }
 
     const changeTurn = () => {
