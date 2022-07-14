@@ -21,3 +21,7 @@
     background-color: #f0fdfa;
 }
 
+.gamecell.closed.win {
+    background-color: #0d9488;
+    color: #fff;
+}

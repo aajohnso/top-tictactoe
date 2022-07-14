@@ -15,6 +15,8 @@ const gameBoard = (() => {
     
     const Player = (name, mark) => {
         const cellsPlayed = [];
+        let winningCells;
+        const getWinningCells = () => winningCells;
         const getName = () => name;
         const addMark = (cell) => {
             board[cell] = mark;
@@ -26,12 +28,13 @@ const gameBoard = (() => {
                 winCondition => {
                     if(winCondition.every(cell => cellsPlayed.includes(cell))) {
                         win = true;
+                        winningCells = winCondition;
                     }
                 }
             );
             return win;
         }
-        return {addMark, getName, checkWin};
+        return {addMark, getName, checkWin, getWinningCells};
     };
 
     const playerOne = Player("Player One", "x");
@@ -44,7 +47,6 @@ const gameBoard = (() => {
 const displayController = (() => {
 
     let turn = 0;
-    let gameOver = false;
     let currentTurn = gameBoard.playerOne;
     
     const gameBoardDiv = document.getElementById("gameboard");
@@ -63,19 +65,27 @@ const displayController = (() => {
         this.classList.add("closed");
         this.removeEventListener("click", displayMark);
         if (turn == 9) {
-            gameOver = true;
-            console.log("TIE");
+            // TIE
         } else if (currentTurn.checkWin()) {
-            gameOver = true;
-            console.log("WIN");
+            highlightWin(currentTurn.getWinningCells());
             for (i = 0; i < gameBoardCells.length; i++) {
                 gameBoardCells[i].removeEventListener("click", displayMark);
                 gameBoardCells[i].classList.remove("open");
                 gameBoardCells[i].classList.add("closed");
             }
         } else {
+            // CONTINUE
             changeTurn();
         }
+    }
+
+    const highlightWin = (cells) => {
+        console.log(cells);
+        cells.forEach( 
+            cell => {
+                gameBoardCells[cell].classList.add("win");
+            }
+        );
     }
 
     const changeTurn = () => {
