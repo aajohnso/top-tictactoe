@@ -60,7 +60,12 @@ const displayController = (() => {
         turn++;
         let gameCell = this.getAttribute("game-cell");
         currentTurn.addMark(gameCell);
-        this.innerText = gameBoard.board[gameCell];
+
+        let markHTML = document.createElement('div');
+        markHTML.classList.add('game-mark');
+        markHTML.innerText = gameBoard.board[gameCell];
+        this.appendChild(markHTML); 
+        
         this.classList.remove("open");
         this.classList.add("closed");
         this.removeEventListener("click", displayMark);

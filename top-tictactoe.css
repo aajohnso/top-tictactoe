@@ -1,3 +1,7 @@
+* {
+    font-family: monospace;
+}
+
 #gameboard {
     display: grid;
     grid-template-columns: 200px 200px 200px;
@@ -7,6 +11,9 @@
 
 .gamecell {
     border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
 .gamecell.open {
@@ -24,4 +31,9 @@
 .gamecell.closed.win {
     background-color: #0d9488;
     color: #fff;
+}
+
+.gamecell .game-mark {
+    font-size: 150px;
+    padding-bottom: 26px;
 }
