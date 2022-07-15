@@ -14,7 +14,7 @@ const gameBoard = (() => {
     ];
     
     const Player = (name, mark) => {
-        const cellsPlayed = [];
+        let cellsPlayed = [];
         let winningCells;
         const getWinningCells = () => winningCells;
         const getName = () => name;
@@ -34,13 +34,24 @@ const gameBoard = (() => {
             );
             return win;
         }
-        return {addMark, getName, checkWin, getWinningCells};
+        const resetCellsPlayed = () => {
+            cellsPlayed = [];
+        }
+        return {addMark, getName, checkWin, getWinningCells, resetCellsPlayed};
     };
 
     const playerOne = Player("Player One", "x");
     const playerTwo = Player("Player Two", "o");
+    
+    const resetBoard = () => {
+        for (i = 0; i < board.length; i++) {
+            board[i] = "";
+        }
+        playerOne.resetCellsPlayed();
+        playerTwo.resetCellsPlayed();
+    }
 
-    return {board, playerOne, playerTwo};
+    return {board, playerOne, playerTwo, resetBoard};
 
 })();
 
@@ -51,6 +62,9 @@ const displayController = (() => {
     
     const gameBoardDiv = document.getElementById("gameboard");
     const gameBoardCells = document.getElementsByClassName("gamecell");
+    const gameOver = document.getElementById("game-end");
+    const gameResult = document.getElementById("game-result");
+    const resetBtn = document.getElementById("game-reset");
 
     for (i = 0; i < gameBoardCells.length; i++) {
         gameBoardCells[i].addEventListener("click", displayMark);
@@ -65,19 +79,21 @@ const displayController = (() => {
         markHTML.classList.add('game-mark');
         markHTML.innerText = gameBoard.board[gameCell];
         this.appendChild(markHTML); 
-        
+
         this.classList.remove("open");
         this.classList.add("closed");
         this.removeEventListener("click", displayMark);
-        if (turn == 9) {
-            showTie();
-        } else if (currentTurn.checkWin()) {
+        if (currentTurn.checkWin()) {
             highlightWin(currentTurn.getWinningCells());
             for (i = 0; i < gameBoardCells.length; i++) {
                 gameBoardCells[i].removeEventListener("click", displayMark);
                 gameBoardCells[i].classList.remove("open");
                 gameBoardCells[i].classList.add("closed");
             }
+            gameEnd();
+        } else if (turn == 9) {
+            showTie();
+            gameEnd();
         } else {
             // CONTINUE
             changeTurn();
@@ -85,16 +101,16 @@ const displayController = (() => {
     }
 
     const highlightWin = (cells) => {
-        console.log(cells);
         cells.forEach( 
             cell => {
                 gameBoardCells[cell].classList.add("win");
             }
         );
+        gameResult.innerText = `${currentTurn.getName()} wins!`;
     }
 
     const showTie = () => {
-        console.log("TIE");
+        gameResult.innerText = "The game was a tie."
     }
 
     const changeTurn = () => {
@@ -104,5 +120,28 @@ const displayController = (() => {
             currentTurn = gameBoard.playerOne;
         }
     }
+
+    const gameEnd = () => {
+        gameOver.style.visibility = "visible";
+    }
+
+    const resetGame = () => {
+        for (i = 0; i < gameBoardCells.length; i++) {
+            let mark = gameBoardCells[i].querySelector("div");
+            if (mark != null) {
+                mark.remove();
+            }
+            gameBoardCells[i].classList = "gamecell open";
+            gameBoardCells[i].addEventListener("click", displayMark);
+        }
+        turn = 0;
+        currentTurn = gameBoard.playerOne;
+        gameBoard.resetBoard();
+        gameOver.style.visibility = "hidden";
+    }
+
+    resetBtn.addEventListener("click", resetGame);
+
+    return {resetGame}
 
 })();
